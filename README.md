@@ -4,6 +4,5 @@
 ## HD in Science in Data Analytics
 
 
+This repository is for the resources of the Data and Web Mining module.
 
-
-Reports, assignments, mind-maps, all kind of material from my course HD in Science in Data Analytics
