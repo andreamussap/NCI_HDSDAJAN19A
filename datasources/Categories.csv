@@ -1,0 +1,21 @@
+Product_Category_ID,Product_Category_Name,Wine_Type
+1,Cabernet Franc,Red
+2,Cabernet Sauvignon,Red
+3,Carménère,Red
+4,Chardonnay,White
+5,Gewürztraminer,White
+6,Grenache,Rosé
+7,Malbec,Red
+8,Merlot,Red
+9,Muscat Ottonel,White
+10,Nebbiolo,Red
+11,Pinotage,Red
+12,Pinot Grigio / Gris,White
+13,Pinot Noir,Red
+14,Riesling,White
+15,Sauvignon Blanc,White
+16,Sémillon,White
+17,Shiraz / Syrah,Red
+18,Tempranillo,Red
+19,Viognier,White
+20,Zinfandel,Rosé

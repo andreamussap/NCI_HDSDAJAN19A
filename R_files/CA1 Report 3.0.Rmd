@@ -1,0 +1,240 @@
+---
+title: "Report CA1 - Data Visualization - Wine Sales Visual Analysis"
+author: "Andrea, Fabio, James and Lucas"
+date: "5/30/2019"
+output:
+  word_document:
+    toc: yes
+  html_document:
+    df_print: paged
+    pdf_document: default
+    toc: yes
+  pdf_document:
+    latex_engine: xelatex
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+This analysis was conducted as part of group project CA-1 for the Data Visualization module, Higher Diploma in Science in Data Analytics, National College of Ireland.
+
+The goal of this project is to use a large dataset in order to create deliverables using visualization techniques learned in class and in our research.
+
+According to Myatt (2007), a large range of disciplines, from biology to economics, from medical to social research, use data to understand the information available and validate or refute hypotheses. Exploratory Data Analysis (EDA) provides a structured approach to data analysis which states that, notwithstanding the particularities of each dataset and research, any EDA should include the following steps: 
+
+**Problem Definition**
+
+The problem that is expected to be solved, and the definition of all the deliverables of the project.
+  
+**Data Preparation**
+
+The process of collecting, cleaning and transforming data prior to any analysis or data mining. This is the most time consumming step, and normally it takes around 80% of the working time of a data analyst (Ruiz, 2017)
+  
+**Implementation of the analysis**
+
+Having defined the problem and expected deliverables and prepared the data, this step is where the analysis itself is conducted using mathematical and visual tools and appropriate techniques based on the goals and the available data.
+
+**Deployment of the analysis**
+
+The communication step, where the results are made available to intended audience of the research. 
+  
+We will structure this project report based on these four major stages, as it provides a logically organized sequence.
+
+## Problem Definition
+
+To create the required deliverables in scope for this projet:
+* Report with visual EDA (this document);
+* Infographic, included in the project submission (put the link here)
+* Interactive datavisualization, included in the project submission and available [online](https://public.tableau.com/profile/lucas.morato#!/vizhome/WineSales-InteractiveVisualisation/WineSalesOverviewfor2018)
+
+## Data preparation
+
+### About the Dataset
+
+This project is based on an artificial dataset, origionally called 'Black Friday', created for the educational website Analytics Vidhya and made available on kaggle. The licence is classified as CC0: Public Domain, and the dataset is available on [kaggle](https://www.kaggle.com/mehdidag/black-friday).
+
+Originally, this dataset was about Black Friday purchases, but having performed some initial EDA the group agreed that it lacked "character".  For example, "Occupation", "Marital Status" and "Product Category" are represented by numeric values, "City_Category" is represented by a letter.
+
+We decided to create a "backstory" for our project:
+* We are a specialist importer of French wine
+* We wish to illustrate our sales data for 2018 – this will be included in our annual report to executive, investors, shareholders etc 
+* We wish to convey information about the relative popularity of our wines and the breakdown of our customers
+* Our wines come from 3 regions and there are 20 varieties (grapes)
+
+This "story" would make the data more interesting and provide a "theme" (eg colour palettes, icons, images) which could be applied across all visualisations.
+
+We then modified the dataset so that it would represent our sales for 2018 by adding a sale date, mapping category to grape variety, city to wine-region and so on.  
+The modified dataset, WineSales.csv is included in the project submission.
+
+The following code was used to transform the data into the final dataset:
+
+```{r eval=FALSE, include=TRUE}
+library(dplyr)
+
+# R script to transform BlackFriday dataset
+getwd()
+
+#BlackFriday <- read.csv("~/Data/black-friday/BlackFriday.csv", header=TRUE)
+#MarStatLookups <- read.csv("~/Data/black-friday/MarStatLookups.csv", header=TRUE)
+#Occupations <- read.csv("~/Data/black-friday/Occupations.csv", header=TRUE)
+#LocationLookups <- read.csv("~/Data/black-friday/LocationLookups.csv", header=TRUE)
+#Categories <- read.csv("~/Data/black-friday/Categories.csv", header=TRUE)
+
+#JH, 16-06-2019, use git repository structure
+BlackFriday <- read.csv("../datasources/BlackFriday.csv", header=TRUE)
+MarStatLookups <- read.csv("../datasources/MarStatLookups.csv", header=TRUE)
+Occupations <- read.csv("../datasources/Occupations.csv", header=TRUE)
+LocationLookups <- read.csv("../datasources/LocationLookups.csv", header=TRUE)
+Categories <- read.csv("../datasources/Categories.csv", header=TRUE)
+
+#BlackFriday <- BlackFriday[1:1000,] #debug only
+
+#Add marital status description
+WineSales <- merge(BlackFriday, MarStatLookups,by="Marital_Status")
+
+#Add Occupations
+WineSales <- merge(WineSales, Occupations,by="Occupation", all.x = TRUE)
+
+#Add Location data
+WineSales <- merge(WineSales, LocationLookups,by="City_Category")
+
+#Add Category data
+#WineSales <- merge(WineSales, Categories,by.x = "Product_Category_1", 
+# by.y = "Product_Category_ID", all.x = TRUE)
+WineSales  <- WineSales %>% left_join(Categories,by = c("Product_Category_1" = "Product_Category_ID"))
+colnames(WineSales)[colnames(WineSales)=="Product_Category_Name"] <- "GrapeType"
+
+#Add a new column for sale Date
+WineSales$saleDate <- as.Date("31/12/2017", "%d/%m/%Y") 
+WineSales$saleDate <- WineSales$saleDate + runif(length(WineSales$saleDate), min=1, max=366)
+
+#keep only the columns we actually need
+retain_cols <- c("User_ID","Product_ID","Gender","Age","Stay_In_Current_City_Years",
+                 "Purchase","Status_Desc","OccupationDesc","Location","Latitude",
+                 "Longitude","GrapeType","Wine_Type","saleDate")
+WineSales <- subset(WineSales, select=retain_cols)
+
+#view the new df
+glimpse(WineSales)
+
+#save as csv
+write.csv(WineSales, "../datasources/WineSales.csv", row.names = FALSE)
+```
+
+## Implementation of the analysis
+
+Let's start by loading the appropriate libraries:
+```{r message=FALSE, warning=FALSE}
+library('tidyverse') # a package that contains the most usefull tools for analysis and visualization, including 'readr', 'ggplot2' and 'dplyr'. 
+library('skimr') # package for display basic info and stats of data
+library('gridExtra') # to arrange multiple plots in a desired number of rows and columns
+library('knitr') # better tables for rmarkdown
+library('magrittr') #improve readbility, permits the use of %>% pipeline
+library('naniar') # nice package to deal with missing values
+library('kableExtra') # usefull tools for visualization
+library('pander') # to plot nice tables 
+```
+
+Now, we need to load the file into dataframe and check the first rows:
+```{r echo=TRUE, message=FALSE, warning=FALSE, paged.print=TRUE}
+wine_sales <- read_csv("../datasources/WineSales.csv", locale = locale(encoding = "latin1"))
+head(wine_sales) %>%
+  pander(., style = "rmarkdown", split.table = 120)
+```
+
+In order to understand our data, we need a description of the variables:
+
+- User_ID = unique identifier for each customer
+- Product_ID = unique product identifier
+- Gender = M for Male, F for female
+- Age = 5 age groups: 0-17, 18-25, 26-35, 36-45, 46-50, 51-55, 55+
+- WineAge = how many years the wine has been "aged"
+- Purchase = Value of each purchase in Euro
+- Status_Desc = marital status, Single or Married
+- OccupationDesc = profession 
+- Location = the region from which the wine was souced
+- Latitude = latitude, used for mapping Location
+- Longitude = longitude, used for mapping Location
+- GrapeType = variety of grape use in the wine
+- Wine_Type = if the wine is classified as red, rose or white
+  saleDate = date of sale in the format YYYY/MM/DD
+
+Now let's use the package skimr() in order to have the summary statistics of our data and get a general idea about it:
+
+```{r}
+skim_with(numeric = list(hist = NULL))
+skim(wine_sales) 
+```
+
+Some of the information we can get from there:
+
+- We have 537 577 records, divided into 14 variables.
+- There are no missing values, except on the column 'OccupationDesc', where there's 68120, or around of 13%, of it.
+- The date range on the dataset is between 01/01/2018 to 31/12/2018.
+- The average purchase is 9333 cents, or 93.33 EUR. 
+
+To add some useful information to help to find interesting insights, lets find out the maximum and minimum values of purchases:
+
+```{r}
+max(wine_sales$Purchase); min(wine_sales$Purchase)
+```
+
+## Analyzing wine sales
+
+Wine is one of the most popular types of alcohol that are sold in the world, and France represents more than 10% of world wine consumption and more than 20% of world wine production (Wine Institute, 2019).
+
+More text about wine
+
+```{r, out.width = "400pt", fig.align='center'}
+knitr::include_graphics("Sales by Wine Type over Months.png")
+```
+
+## Interactive Visualisation
+
+Once we were satisfied that our data was suitably prepared we created our initial deliverable, an interactive visualisation.  
+The interactive visualisation has been created with the company directors in mind as a way for them to view the distribution of sales for 2018 and the makeup of our customers, it allows them to filter by:
+* Region 
+* Gender
+* Wine type (Red, White or Rosé)
+
+### Sales By Area
+This map shows the 3 sources for our products, the dots are sized according to the value of purchases for each
+```{r, out.width = "400pt", fig.align='center'}
+knitr::include_graphics("../images/FranceMap.png")
+```
+
+
+### Sales by Grape Variety
+This bubble plot shows the relative popularity of the various varieties, we can clearly see that the most popular grapes are Cabernet Franc, Merlot and Gewürztraminer
+```{r, out.width = "400pt", fig.align='center'}
+knitr::include_graphics("../images/SalesByGrape.png")
+```
+
+### Sales per month
+This bar chart shows the sales for each month of 2018 split by type.
+An interesting insight is that we expected to see seasonal variation in the sales of wine types (eg red at Christmas, Rosé in Summer) however the Sales Per Month chart shows that all types sell consistently across the year so that assumption was incorrect.
+```{r, out.width = "400pt", fig.align='center'}
+knitr::include_graphics("../images/SalesPerMonth.png")
+```
+
+### Sales by Occupation
+The company directors are interested to know more about the type of people who purchase our products
+This bar chart shows the sales by employment sector again split by type.
+```{r, out.width = "400pt", fig.align='center'}
+knitr::include_graphics("../images/SalesPerMonth.png")
+```
+
+### Sales by Age group
+We also charted the sales by age group - our products are surprisingly popular with under-18s!
+```{r, out.width = "400pt", fig.align='center'}
+knitr::include_graphics("../images/SalesbyAge.png")
+```
+
+##Infographic
+We then createn an infographic.  The purpose of the inforgraphic is to provide an at-at-glance summary of the products we offer.... 
+
+## 
