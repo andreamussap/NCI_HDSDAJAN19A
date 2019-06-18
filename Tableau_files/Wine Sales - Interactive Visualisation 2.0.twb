@@ -27,7 +27,7 @@
       <connection class='federated'>
         <named-connections>
           <named-connection caption='WineSales' name='textscan.0wk9tnx0qh9r6715u46cq1x3n96h'>
-            <connection class='textscan' directory='/Users/lucasmorato/Desktop/Data Visualization/CA_1' filename='WineSales.csv' password='' server='' workgroup-auth-mode='as-is' />
+            <connection class='textscan' directory='../datasources' ' filename='WineSales.csv' password='' server='' workgroup-auth-mode='as-is' />
           </named-connection>
         </named-connections>
         <relation connection='textscan.0wk9tnx0qh9r6715u46cq1x3n96h' name='WineSales.csv' table='[WineSales#csv]' type='table'>
@@ -296,7 +296,7 @@
         </groupfilter>
       </group>
       <extract count='-1' enabled='true' units='records'>
-        <connection access_mode='readonly' authentication='auth-none' author-locale='en_US' class='hyper' dbname='/Users/lucasmorato/Documents/My Tableau Repository/Datasources/WineSales.hyper' default-settings='yes' schema='Extract' sslmode='' tablename='Extract' update-time='06/15/2019 10:54:46 AM' username='tableau_internal_user'>
+        <connection access_mode='readonly' authentication='auth-none' author-locale='en_US' class='hyper' dbname='../datasources/WineSales.hyper' default-settings='yes' schema='Extract' sslmode='' tablename='Extract' update-time='06/15/2019 10:54:46 AM' username='tableau_internal_user'>
           <relation name='Extract' table='[Extract].[Extract]' type='table' />
           <refresh increment-key='' incremental-updates='false'>
             <refresh-event add-from-file-path='' increment-value='%null%' refresh-type='create' rows-inserted='537577' timestamp-start='2019-06-15 10:54:46.372' />

@@ -107,15 +107,17 @@ WineSales <- merge(WineSales, LocationLookups,by="City_Category")
 # by.y = "Product_Category_ID", all.x = TRUE)
 WineSales  <- WineSales %>% left_join(Categories,by = c("Product_Category_1" = "Product_Category_ID"))
 colnames(WineSales)[colnames(WineSales)=="Product_Category_Name"] <- "GrapeType"
+colnames(WineSales)[colnames(WineSales)=="Stay_In_Current_City_Years"] <- "WineAge"
+
+#convert to Euro values
+WineSales$Purchase <- WineSales$Purchase/100
 
 #Add a new column for sale Date
 WineSales$saleDate <- as.Date("31/12/2017", "%d/%m/%Y") 
 WineSales$saleDate <- WineSales$saleDate + runif(length(WineSales$saleDate), min=1, max=366)
 
 #keep only the columns we actually need
-retain_cols <- c("User_ID","Product_ID","Gender","Age","Stay_In_Current_City_Years",
-                 "Purchase","Status_Desc","OccupationDesc","Location","Latitude",
-                 "Longitude","GrapeType","Wine_Type","saleDate")
+retain_cols <- c("User_ID","Product_ID","Gender","Age","WineAge","Purchase","Status_Desc","OccupationDesc","Location","Latitude","Longitude","GrapeType","Wine_Type","saleDate")
 WineSales <- subset(WineSales, select=retain_cols)
 
 #view the new df
