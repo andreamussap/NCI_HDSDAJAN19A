@@ -22,10 +22,10 @@ This repository is for the resources of the **Data Visualization** module.
 
 - Checkout the `master branch` and `pull` latest changes
 - Create a new `feature branch`
- - (suggested name: FM_fbranch_<yourwork>, LM_fbranch_<yourwork>...)
+  - suggested name: FM_fbranch_yourwork, LM_fbranch_yourwork...
 - Place files in their respective folders (for example, your R code in folder `R_files`, etc)
 - In your feature branch, git status, add, commit, and push your changes to create a PR
- - add a relevant message to the `commit`
+  - (add a relevant message to the `commit`)
 - Assign reviewers to approve your `PR`
 - Merge your PR when it's approved
 - Delete feature branch after merging
