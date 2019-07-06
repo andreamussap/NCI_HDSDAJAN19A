@@ -3,7 +3,11 @@
 ## Script: DataPreparation.R
 ## Purpose: R script to transform BlackFriday dataset into WineSales
 
-## Group: Andrea, Fabio, James and Lucas
+## Group:
+# Andrea Mussap, 18177115
+# Fabio Mussap, 18184618
+# James Hedderman, 18190481
+# Lucas Morato, 18184481
 ##################################################
 
 
