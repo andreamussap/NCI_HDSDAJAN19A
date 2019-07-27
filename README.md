@@ -4,13 +4,18 @@
 ## HD in Science in Data Analytics
 
 
-This repository is for the resources of the **Data Visualization** module.
+This repository is for the resources of the **Data Visualization** module, continuous assessment 1 (ca1).
 
 ## Information
 
 - The deadline for this project is July 3rd, 2019
 
+## Collaborators
 
+- Andrea
+- Fabio
+- James
+- Lucas
 
 ## Guidelines for collaboration
 
@@ -33,10 +38,3 @@ This repository is for the resources of the **Data Visualization** module.
     - [Article about why to use feature branches](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow)
 
 
-
-## Collaborators
-
-- Andrea
-- Fabio
-- James
-- Lucas
