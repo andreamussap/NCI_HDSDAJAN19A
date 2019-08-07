@@ -1,5 +1,3 @@
-![NCIbanner](/images/NCI_banner.jpg)
-
 # National College of Ireland
 ## HD in Science in Data Analytics
 
