@@ -6,6 +6,10 @@
 
 This repository is for the resources of the **Data Visualization** module.
 
+## Individual assignement CA2 
+
+- The deadline for this project is August 8th, 2019
+
 ## Group assignement CA1 
 
 - The deadline for this project is July 3rd, 2019
