@@ -4,9 +4,9 @@
 ## HD in Science in Data Analytics
 
 
-This repository is for the resources of the **Data Visualization** module, continuous assessment 1 (ca1).
+This repository is for the resources of the **Data Visualization** module.
 
-## Information
+## Group assignement CA1 
 
 - The deadline for this project is July 3rd, 2019
 
